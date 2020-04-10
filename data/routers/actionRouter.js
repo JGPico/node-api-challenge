@@ -4,15 +4,15 @@ const router = express.Router();
 const Actions = require('../helpers/actionModel.js');
 const Projects = require('../helpers/projectModel.js');
 
-router.post('/', validateAction, (req, res) => {
-    Actions.insert(req.body)
-    .then(act => {
-      res.status(201).json(act)
-    })
-    .catch(err => {
-      res.status(500).json({error: "Error adding action"});
-    })
-  });
+// router.post('/', (req, res) => {
+//     Actions.insert(req.body)
+//     .then(act => {
+//       res.status(201).json(act)
+//     })
+//     .catch(err => {
+//       res.status(500).json({error: "Error adding action"});
+//     })
+//   });
   
   
   router.get('/', (req, res) => {
@@ -44,7 +44,7 @@ router.post('/', validateAction, (req, res) => {
     })
   });
   
-  router.put('/:id', validateActionId, validateAction, (req, res) => {
+  router.put('/:id', validateActionId, (req, res) => {
     Actions.update(req.params.id, req.body)
     .then(act => {
       res.status(200).json({message: "Successfully updated action"});
@@ -75,10 +75,11 @@ router.post('/', validateAction, (req, res) => {
 
     Projects.get()
     .then(projArr => {
-        console.log("projectArray", projArr);
-        let idArray = projArr.map(el => {return el.id});
-        let idBool = idArray.find(req.body.project_id);
         
+        let idArray = projArr.map(el =>  el.id);
+        
+        let idBool = idArray.find(req.body.project_id);
+        console.log("projectArray", projArr);
 
         if (!req.body) {
             res.status(400).json({error: "Missing action data"});

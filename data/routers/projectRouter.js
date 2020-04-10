@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const Projects = require('../helpers/projectModel.js');
+const Actions = require('../helpers/actionModel.js');
 
 router.post('/', validateProject, (req, res) => {
     Projects.insert(req.body)
@@ -12,6 +13,30 @@ router.post('/', validateProject, (req, res) => {
       res.status(500).json({error: "Error adding project"});
     })
   });
+
+  
+router.post('/:id/actions', (req, res) => {
+  Projects.get(req.params.id)
+  .then(proj => {
+    if (proj) {
+      Actions.insert(req.body)
+      .then(act => {
+        res.status(201).json(act)
+      })
+      .catch(err => {
+        res.status(500).json({error: "Error adding action"});
+      });
+    } else {
+      res.status(400).json({error: "Id does not exist"});
+    }
+  })
+    
+  .catch(err => {
+    res.status(400).json({error: "Invalid project id"});
+  })
+
+  
+});
   
   
   router.get('/', (req, res) => {
@@ -88,6 +113,13 @@ router.post('/', validateProject, (req, res) => {
       next();
     }
   }
+
+  // function validateProjectAction(req, res, next) {
+  //   Projects.get()
+  //   .then(projArr => {
+  //     projArr.map()
+  //   })
+  // }
   
 
 module.exports = router;
