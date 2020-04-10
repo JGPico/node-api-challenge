@@ -75,8 +75,8 @@ router.post('/', validateAction, (req, res) => {
 
     Projects.get()
     .then(projArr => {
-        let projectArray = projArr;
-        let idArray = projectArray.map(el => el.id);
+        console.log("projectArray", projArr);
+        let idArray = projArr.map(el => {return el.id});
         let idBool = idArray.find(req.body.project_id);
         
 
